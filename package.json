@@ -1,21 +1,32 @@
 {
-    "name": "sailsgulp",
-    "private": true,
-    "version": "0.0.0",
-    "description": "a Sails application",
-    "dependencies": {
-        "sails": "0.9.16",
-        "grunt": "0.4.1",
-        "sails-disk": "~0.9.0",
-        "ejs": "0.8.4",
-        "optimist": "0.3.4"
-    },
-    "scripts": {
-        "start": "node app.js",
-        "debug": "node debug app.js"
-    },
-    "main": "app.js",
-    "repository": "",
-    "author": "",
-    "license": ""
+  "name": "sails-gulp",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Adding gulp to sails.",
+  "dependencies": {
+    "sails": "0.9.16",
+    "grunt": "0.4.1",
+    "sails-disk": "~0.9.0",
+    "ejs": "0.8.4",
+    "optimist": "0.3.4"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "debug": "node debug app.js"
+  },
+  "main": "app.js",
+  "repository": "",
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "gulp": "^3.6.2",
+    "gulp-clean": "^0.2.4",
+    "gulp-concat": "^2.2.0",
+    "gulp-watch": "^0.6.4",
+    "gulp-less": "^1.2.3",
+    "gulp-jst": "^0.1.1",
+    "gulp-cssmin": "^0.1.5",
+    "gulp-coffee": "^1.4.3",
+    "gulp-uglify": "^0.3.0"
+  }
 }
