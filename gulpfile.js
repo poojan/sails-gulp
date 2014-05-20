@@ -2,7 +2,7 @@ var gulp = require('gulp');
 
 var clean = require('gulp-clean');
 var concat = require('gulp-concat');
-// TODO: sails linker
+var linker = require('gulp-linker');
 var jst = require('gulp-jst');
 var watch = require('gulp-watch');
 var uglify = require('gulp-uglify');
@@ -208,7 +208,153 @@ gulp.task('cssmin:dist', function () {
 gulp.task('cssmin', ['cssmin:dist']);
 
 
-// TODO: sails linker
+gulp.task('sails-linker:devJs', function () {
+  gulp.src([
+    '.tmp/public/**/*.html',
+    'views/**/*.html',
+    'views/**/*.ejs'
+  ]).pipe(linker({
+    scripts: jsFilesToInject,
+    startTag: '<!--SCRIPTS-->',
+    endTag: '<!--SCRIPTS END-->',
+    fileTmpl: '<script src="%s"></script>',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:prodJs', function () {
+  gulp.src([
+    '.tmp/public/**/*.html',
+    'views/**/*.html',
+    'views/**/*.ejs'
+  ]).pipe(linker({
+    scripts: ['.tmp/public/min/production.js'],
+    startTag: '<!--SCRIPTS-->',
+    endTag: '<!--SCRIPTS END-->',
+    fileTmpl: '<script src="%s"></script>',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:devStyles', function () {
+  gulp.src([
+    '.tmp/public/**/*.html',
+    'views/**/*.html',
+    'views/**/*.ejs'
+  ]).pipe(linker({
+    scripts: cssFilesToInject,
+    startTag: '<!--STYLES-->',
+    endTag: '<!--STYLES END-->',
+    fileTmpl: '<link rel="stylesheet" href="%s">',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:prodStyles', function () {
+  gulp.src([
+    '.tmp/public/**/*.html',
+    'views/**/*.html',
+    'views/**/*.ejs'
+  ]).pipe(linker({
+    scripts: ['.tmp/public/min/production.css'],
+    startTag: '<!--STYLES-->',
+    endTag: '<!--STYLES END-->',
+    fileTmpl: '<link rel="stylesheet" href="%s">',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:devTpl', function () {
+  gulp.src([
+    '.tmp/public/**/*.html',
+    'views/**/*.html',
+    'views/**/*.ejs'
+  ]).pipe(linker({
+    scripts: ['.tmp/public/jst.js'],
+    startTag: '<!--TEMPLATES-->',
+    endTag: '<!--TEMPLATES END-->',
+    fileTmpl: '<script type="text/javascript" src="%s"></script>',
+    appRoot: '.tmp/public'
+  }));
+});
+
+
+// Jade
+gulp.task('sails-linker:devJsJADE', function () {
+  gulp.src([
+    'views/**/*.jade'
+  ]).pipe(linker({
+    scripts: jsFilesToInject,
+    startTag: '// SCRIPTS',
+    endTag: '// SCRIPTS END',
+    fileTmpl: 'script(type="text/javascript", src="%s")',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:prodJsJADE', function () {
+  gulp.src([
+    'views/**/*.jade'
+  ]).pipe(linker({
+    scripts: ['.tmp/public/min/production.js'],
+    startTag: '// SCRIPTS',
+    endTag: '// SCRIPTS END',
+    fileTmpl: 'script(type="text/javascript", src="%s")',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:devStylesJADE', function () {
+  gulp.src([
+    'views/**/*.jade'
+  ]).pipe(linker({
+    scripts: cssFilesToInject,
+    startTag: '// STYLES',
+    endTag: '// STYLES END',
+    fileTmpl: 'link(rel="stylesheet", href="%s")',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:prodStylesJADE', function () {
+  gulp.src([
+    'views/**/*.jade'
+  ]).pipe(linker({
+    scripts: ['.tmp/public/min/production.css'],
+    startTag: '// STYLES',
+    endTag: '// STYLES END',
+    fileTmpl: 'link(rel="stylesheet", href="%s")',
+    appRoot: '.tmp/public'
+  }));
+});
+
+gulp.task('sails-linker:devTplJADE', function () {
+  gulp.src([
+    'views/**/*.jade'
+  ]).pipe(linker({
+    scripts: ['.tmp/public/jst.js'],
+    startTag: '// TEMPLATES',
+    endTag: '// TEMPLATES END',
+    fileTmpl: 'script(type="text/javascript", src="%s")',
+    appRoot: '.tmp/public'
+  }));
+});
+
+
+gulp.task('sails-linker', [
+  'sails-linker:devJs',
+  'sails-linker:prodJs',
+  'sails-linker:devStyles',
+  'sails-linker:prodStyles',
+  'sails-linker:devTpl',
+
+  'sails-linker:devJsJADE',
+  'sails-linker:prodJsJADE',
+  'sails-linker:devStylesJADE',
+  'sails-linker:prodStylesJADE',
+  'sails-linker:devTplJADE'
+]);
+
 
 
 gulp.task('watch:api', function () {
@@ -232,7 +378,7 @@ gulp.task('compileAssets', [
   'clean:dev',
   'jst:dev',
   'less:dev',
-  'copy:dev'
+  'copy:dev',
   'coffee:dev'
 ]);
 
