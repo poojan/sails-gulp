@@ -1,0 +1,2 @@
+# sailsgulp
+### a Sails application
